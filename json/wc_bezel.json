@@ -1,0 +1,25 @@
+{
+	"bezel": [
+	{
+		"id" : 1,
+		"sku_name" : "Bezel Sterling Silver 001",
+		"stock" : 2,
+		"front_image" : "bezel_1.png",
+		"price" : 10.5
+	},
+	{
+		"id" : 2,
+		"sku_name" : "Bezel Rose-gold 002",
+		"stock" : 3,
+		"front_image" : "bezel_2.png",
+		"price" : 15
+	},
+	{
+		"id" : 3,
+		"sku_name" : "Bezel Carbon Black 003",
+		"stock" : 6,
+		"front_image" : "bezel_3.png",
+		"price" : 11
+	}
+]
+}

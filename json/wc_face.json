@@ -1,0 +1,25 @@
+{
+	"face" :[
+	{
+		"id" : 1,
+		"sku_name" : "Face Analog Rolex 001",
+		"stock" : 2,
+		"front_image" : "face_1.png",
+		"price" : 120
+	},
+	{
+		"id" : 2,
+		"sku_name" : "Face Analog Timex White 001",
+		"stock" : 3,
+		"front_image" : "face_2.png",
+		"price" : 12
+	},
+	{
+		"id" : 3,
+		"sku_name" : "Face Analog Chrono Ted Baker 001",
+		"stock" : 2,
+		"front_image" : "face_3.png",
+		"price" : 40
+	}
+	]
+}

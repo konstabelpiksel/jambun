@@ -1,0 +1,25 @@
+{
+	"strap" :[
+		{
+			"id" : 1,
+			"sku_name" : "Strap Calf Skin Leather 001",
+			"stock" : 5,
+			"front_image" : "strap_1.png",
+			"price" : 20
+		},
+		{
+			"id" : 2,
+			"sku_name" : "Strap Green NATO Nylon 001",
+			"stock" : 3,
+			"front_image" : "strap_2.png",
+			"price" : 10
+		},
+		{
+			"id" : 3,
+			"sku_name" : "Strap Buckle Fake Leather 001",
+			"stock" : 5,
+			"front_image" : "strap_3.png",
+			"price" : 25
+		}
+	]
+}

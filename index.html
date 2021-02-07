@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link type="text/css" rel="stylesheet" href="./css/materialize.min.css"  media="screen,projection"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<title>Penyesuai Produk - Jam</title>
+	<style type="text/css">
+		body{
+			background: #606c88;  /* fallback for old browsers */
+			background: -webkit-linear-gradient(to right, #3f4c6b, #606c88);  /* Chrome 10-25, Safari 5.1-6 */
+			background: linear-gradient(to right, #3f4c6b, #606c88); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+			color: #fff;
+		}
+		table{
+			color: #000;
+		}
+		.container{
+			margin: 0px auto;
+			max-width: 600px;
+		}
+		.visualizer{
+			background-color: #6c8b96;
+			height: 500px;
+			min-width: 150px;
+			max-width: 305px;
+		}
+		.btn{
+			margin-top: 40px;
+			width: 80px;
+		}
+		.button-control{
+			margin-top: 90px;
+		}
+		.watch_display{
+			min-width: 150px;
+			overflow: hidden;
+		}
+		#wc_bezel{
+			z-index: 100;
+		}
+		#wc_face{
+			z-index: 40;
+		}
+		#wc_strap{
+			z-index: 10;
+		}
+		#total_price{
+			font-weight: bolder;
+		}
+		
+		@media (max-width: 2000px){
+			.resp-img{
+				object-fit: cover; 
+				object-position: center;
+				position: absolute;
+				transform: translateX(-50%);
+			}
+		}
+
+
+		@media (max-width: 680px){
+			.resp-img{
+				object-fit: cover; 
+				object-position: center;
+				position: absolute;
+				transform: translateX(-40%);
+			}
+		}
+
+		@media (max-width: 500px){
+			.resp-img{
+				object-fit: cover; 
+				object-position: center;
+				position: absolute;
+				transform: translateX(-50%);
+			}
+		}
+
+
+
+	</style>
+</head>
+
+<body>
+
+	<div class="container">
+
+		<div class="row">
+			<div class="col s12 center-align">
+				<h4>Penyesuai Jam</h4>
+				<p>HTML/jQuery | <a href="https://github.com/konstabelpiksel/jambun">Git</a> | Konstabel Piksel</p>
+			</div>
+		</div>
+
+		<div class="row center-align">
+
+			<div class="col s3 xs3 right-align button-control" style="padding-right:0px">
+				<a class="btn brown darken-1" id="strap_previous"><i class="material-icons right">theaters</i><</a>
+				<br/> 
+				<a class="btn blue darken-2" id="face_previous"><i class="material-icons right">watch_later</i><</a>
+				<br/> 
+				<a class="btn grey darken-2" id="bezel_previous"><i class="material-icons right">all_out</i><</a>
+
+			</div>
+
+			<div class="col s6 xs6  visualizer">
+
+				<div class="watch_display" id="wc_strap"></div>
+				<div class="watch_display" id="wc_face"></div>
+				<div class="watch_display" id="wc_bezel"></div>
+
+			</div>
+
+			<div class="col s3 xs6 left-align button-control" style="padding-left:0px">
+				<a class="btn brown darken-1" id="strap_next"><i class="material-icons left">theaters</i>></a>
+				<br/> 
+				<a class="btn blue darken-2" id="face_next"><i class="material-icons left">watch_later</i>></a>
+				<br/> 
+				<a class="btn grey darken-2" id="bezel_next"><i class="material-icons left">all_out</i>></a>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col s12 center-align">
+				<p>Harga keseluruhan (RM): 
+					<span id="strap_price">0</span> + 
+					<span id="face_price">0</span> +
+					<span id="bezel_price">0</span> =
+					<span id="total_price">0</span>          
+				</p>
+			</div>
+		</div>
+
+
+		<div class="fixed-action-btn">
+			<a class="btn-floating btn-large red">
+				<i class="large material-icons">shopping_cart</i>
+			</a>
+		</div>
+
+		<div id="modal1" class="modal">
+    		<div class="modal-content">
+      		<h4 style="color:#000">Daftar Pembelian</h4>
+      			<div id="table_checkout"></div>
+    		</div>
+    		<div class="modal-footer">
+      			<a href="#!" class="modal-close btn red darken-2" >Batal</a>
+      			<a href="#!" class="modal-close btn green darken-2" id="pesanan">Sahkan</a>
+    		</div>
+  		</div>
+
+
+
+	</div>
+
+	<script type="text/javascript" src="./js/jquery-3.5.1.min.js"></script>
+	<script type="text/javascript" src="./js/materialize.min.js"></script>
+	<script type="text/javascript">
+
+		$(document).ready(function(){
+
+			var imgdir = './img/';
+
+      //load JSON for all watch components
+      //ni just nak simulate load data dari database
+      //boleh guna firebase, free aje
+
+      var wc_strap, wc_strap_index, wc_strap_count;
+      var wc_face, wc_face_index, wc_face_count;
+      var wc_bezel, wc_bezel_index, wc_bezel_count;
+      var total_price;
+
+      //initiate the modal
+      $('.modal').modal();
+      
+      $.getJSON('./json/wc_strap.json', function(data){
+      	wc_strap = data;
+      	$('#wc_strap').html('<img class="resp-img" src="' + imgdir + wc_strap.strap[0].front_image + '" />');
+      	$('#strap_price').text((wc_strap.strap[0].price).toFixed(2));
+      	wc_strap_index = 0;
+      	wc_strap_count = wc_strap.strap.length;
+      	updatePricing();
+      });
+
+      $.getJSON('./json/wc_face.json', function(data){
+      	wc_face = data;
+      	$('#wc_face').html('<img class="resp-img" src="' + imgdir + wc_face.face[0].front_image + '" />');
+      	$('#face_price').text((wc_face.face[0].price).toFixed(2));
+      	wc_face_index = 0;
+      	wc_face_count = wc_face.face.length;
+      	updatePricing();
+      });
+
+      $.getJSON('./json/wc_bezel.json', function(data){
+      	wc_bezel = data;
+      	$('#wc_bezel').html('<img class="resp-img" src="' + imgdir + wc_bezel.bezel[0].front_image + '" />');
+      	$('#bezel_price').text((wc_bezel.bezel[0].price).toFixed(2));
+      	wc_bezel_index = 0;
+      	wc_bezel_count = wc_bezel.bezel.length;
+      	updatePricing();
+      });
+
+
+      //floating checkout button
+      $('.fixed-action-btn').floatingActionButton();
+
+      $('.fixed-action-btn').on("click", function(){
+      	$('#table_checkout').html(checkOut());
+      	$('.modal').modal('open');
+      });
+
+      //buat pesanan
+      $('#pesanan').on("click", function(){
+      	console.log('PESANAN DIHANTAR');
+      });
+
+
+      //check out, show modal with price
+      function checkOut(){
+      	var table_checkout = '<table><thead><tr><th>&nbsp;</th><th>Produk/Perkhidmatan</th><th>Harga</th></tr></thead>';
+      	table_checkout += '<tbody>';
+      	table_checkout += '<tr><td>1</td><td>'+wc_bezel.bezel[wc_bezel_index].sku_name+'</td><td style="text-align:right">'+(wc_bezel.bezel[wc_bezel_index].price).toFixed(2)+'</td><td></tr>';
+		table_checkout += '<tr><td>2</td><td>'+wc_face.face[wc_face_index].sku_name+'</td><td style="text-align:right">'+(wc_face.face[wc_face_index].price).toFixed(2)+'</td><td></tr>';
+		table_checkout += '<tr><td>3</td><td>'+wc_strap.strap[wc_strap_index].sku_name+'</td><td style="text-align:right">'+(wc_strap.strap[wc_strap_index].price).toFixed(2)+'</td><td></tr>';
+		table_checkout += '<tr><td>4</td><td>Pembungkusan dan Penghantaran</td><td style="text-align:right">10.00</td><td></tr>';
+		table_checkout += '<tr><th style="text-align:right" colspan="2">Jumlah Keseluruhan</th><td style="text-align:right">'+(total_price+10).toFixed(2)+'</td><td></tr>';
+		table_checkout += '</tbody></table>';
+		return table_checkout;
+      }
+
+
+      //selection of watch strap/face/bezel
+      $('#strap_next').on("click", function(){
+      	wc_strap_index++;
+      	if(wc_strap_index == wc_strap_count){
+      		wc_strap_index = 0;
+      	}
+      	$('#wc_strap').html('<img class="resp-img" src="' + imgdir + wc_strap.strap[wc_strap_index].front_image + '" />');
+      	$('#strap_price').text((wc_strap.strap[wc_strap_index].price).toFixed(2));
+      	updatePricing();
+      });
+
+      $('#strap_previous').on("click", function(){
+      	wc_strap_index--;
+      	if(wc_strap_index == -1){
+      		wc_strap_index = wc_strap_count-1;
+      	}
+      	$('#wc_strap').html('<img class="resp-img" src="' + imgdir + wc_strap.strap[wc_strap_index].front_image + '" />');
+      	$('#strap_price').text((wc_strap.strap[wc_strap_index].price).toFixed(2));
+      	updatePricing();
+      });
+
+      $('#face_next').on("click", function(){
+      	wc_face_index++;
+      	if(wc_face_index == wc_face_count){
+      		wc_face_index = 0;
+      	}
+      	$('#wc_face').html('<img class="resp-img" src="' + imgdir + wc_face.face[wc_face_index].front_image + '" />');
+      	$('#face_price').text((wc_face.face[wc_face_index].price).toFixed(2));
+      	updatePricing();
+      });
+
+      $('#face_previous').on("click", function(){
+      	wc_face_index--;
+      	if(wc_face_index == -1){
+      		wc_face_index = wc_face_count-1;
+      	}
+      	$('#wc_face').html('<img class="resp-img" src="' + imgdir + wc_face.face[wc_face_index].front_image + '" />');
+      	$('#face_price').text((wc_face.face[wc_face_index].price).toFixed(2));
+      	updatePricing();
+      });
+
+      $('#bezel_next').on("click", function(){
+      	wc_bezel_index++;
+      	if(wc_bezel_index == wc_bezel_count){
+      		wc_bezel_index = 0;
+      	}
+      	$('#wc_bezel').html('<img class="resp-img" src="' + imgdir + wc_bezel.bezel[wc_bezel_index].front_image + '" />');
+      	$('#bezel_price').text((wc_bezel.bezel[wc_bezel_index].price).toFixed(2));
+      	updatePricing();
+      });
+
+      $('#bezel_previous').on("click", function(){
+      	wc_bezel_index--;
+      	if(wc_bezel_index == -1){
+      		wc_bezel_index = wc_bezel_count-1;
+      	}
+      	$('#wc_bezel').html('<img class="resp-img" src="' + imgdir + wc_bezel.bezel[wc_bezel_index].front_image + '" />');
+      	$('#bezel_price').text((wc_bezel.bezel[wc_bezel_index].price).toFixed(2));
+      	updatePricing();
+      });
+
+      //update pricing
+      function updatePricing(){
+      	total_price = eval($('#strap_price').html()) + eval($('#bezel_price').html()) + eval($('#face_price').html());  
+      	$('#total_price').text(total_price.toFixed(2));
+      }
+
+
+
+
+
+
+  })
+
+
+
+</script>
+</body>
+</html>
